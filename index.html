@@ -1,0 +1,1476 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-preset="primary">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armony Bakery &mdash; Pasteler&iacute;a Artesanal en Panam&aacute;</title>
+  <meta name="description" content="Pasteles artesanales elaborados con amor para celebraciones &uacute;nicas. M&aacute;s de 7 a&ntilde;os en Panam&aacute;.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,800;1,9..40,300&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --ink:     #1e0c0a;
+      --cream:   #faf6f1;
+      --warm:    #f5ede4;
+      --coral:   #f7838d;
+      --orange:  #ec5228;
+      --muted:   #9a6b62;
+      --light:   #ffd2c7;
+      --sans:    'DM Sans', sans-serif;
+      --serif:   'Cormorant Garamond', serif;
+      --mono:    'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PROGRESS BAR ── */
+    #prog {
+      position: fixed; top: 0; left: 0; height: 1px;
+      background: var(--orange); z-index: 1000; width: 0%;
+      transition: width .08s linear;
+    }
+
+    /* ── NOISE GRAIN ── */
+    #grain {
+      position: fixed; inset: 0; z-index: 9000;
+      pointer-events: none; opacity: .035;
+    }
+
+    /* ── NAVBAR ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.75rem 2.5rem;
+      background: var(--ink);
+      transition: background .5s, padding .5s, backdrop-filter .5s;
+    }
+    #nav.solid {
+      background: rgba(30,12,10,.97);
+      backdrop-filter: blur(20px);
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav-logo {
+      font-family: var(--sans); font-weight: 800; font-size: .9rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink); text-decoration: none;
+      transition: color .4s;
+    }
+    .nav-logo span { color: var(--coral); }
+    .nav-links a {
+      font-family: var(--sans); font-size: .82rem; font-weight: 500;
+      letter-spacing: .06em; color: rgba(255,255,255,.75);
+      text-decoration: none; transition: color .3s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      font-family: var(--sans); font-size: .75rem; font-weight: 700;
+      letter-spacing: .06em; color: #fff;
+      border: 1px solid rgba(255,255,255,.35);
+      padding: .5rem 1.25rem; border-radius: 9999px;
+      text-decoration: none; transition: background .3s, color .3s, border-color .3s;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,.15); color: #fff !important; border-color: rgba(255,255,255,.6) !important; }
+
+    /* ── FADE ANIMATIONS ── */
+    .reveal { opacity: 0; transform: translateY(32px); }
+
+    /* ── CTA BUTTON ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: var(--sans); font-weight: 700; font-size: .875rem;
+      letter-spacing: .04em; text-decoration: none;
+      padding: .9rem 2rem; border-radius: 9999px;
+      background: var(--orange); color: #fff;
+      position: relative; overflow: hidden;
+      transition: transform .3s cubic-bezier(.25,.46,.45,.94);
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(0,0,0,.12);
+      transform: translateX(-101%);
+      transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+    }
+    .btn:hover { transform: translateY(-2px) scale(1.02); }
+    .btn:hover::after { transform: translateX(0); }
+    .btn > * { position: relative; z-index: 1; }
+
+    /* ── SECTION LABEL ── */
+    .label {
+      font-family: var(--mono); font-size: .75rem;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); display: block; margin-bottom: 1.25rem;
+    }
+
+    /* ── BIG HEADLINE ── */
+    .display {
+      font-family: var(--serif); font-style: italic; font-weight: 300;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      line-height: .95; letter-spacing: -.01em;
+      color: var(--ink);
+    }
+    .display-light { color: var(--light); }
+
+    /* ── SECTION RHYTHM ── */
+    .section { padding: 8rem 2.5rem; }
+    .section-sm { padding: 5rem 2.5rem; }
+    .container { max-width: 72rem; margin: 0 auto; }
+
+    /* ── PHOTO CARD (cakes sin cortar) ── */
+    .cake-card {
+      background: var(--warm);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cake-card img {
+      width: 100%; height: 100%;
+      object-fit: contain; object-position: center;
+      padding: 1rem;
+    }
+
+    /* ── LIFT HOVER ── */
+    .lift { transition: transform .35s ease, box-shadow .35s ease; }
+    .lift:hover { transform: translateY(-5px); box-shadow: 0 24px 60px rgba(30,12,10,.12); }
+
+    /* ── MOBILE ── */
+    #ham { display: none; background: none; border: none; cursor: pointer; }
+    #mob { opacity: 0; visibility: hidden; pointer-events: none; transition: .3s; }
+    #mob.open { opacity: 1; visibility: visible; pointer-events: all; }
+
+    /* ── SABORES RESPONSIVE ── */
+    @media(max-width: 640px) {
+      .sabores-cols {
+        grid-template-columns: 1fr !important;
+        gap: 2rem;
+      }
+      .sabores-cols > div {
+        padding: 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(30,12,10,.1);
+        padding-bottom: 2rem !important;
+      }
+      .sabores-cols > div:last-child {
+        border-bottom: none;
+        padding-bottom: 0 !important;
+      }
+    }
+
+    @media(max-width: 768px) {
+      .nav-links, .nav-cta-wrap { display: none !important; }
+      #ham { display: block; }
+      #nav { padding: 1.25rem 1.5rem; }
+      #nav.solid { padding: .9rem 1.5rem; }
+      .section { padding: 5rem 1.5rem; }
+      .section-sm { padding: 3.5rem 1.5rem; }
+      .two-col { grid-template-columns: 1fr !important; gap: 3rem !important; }
+      .three-col { grid-template-columns: 1fr 1fr !important; }
+      /* Hero mobile: imagen portrait cubre todo, texto abajo */
+      #hero { background: var(--cream) !important; }
+      #hero-img {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        object-fit: cover !important;
+        object-position: center top !important;
+      }
+      #hero > div:first-of-type {
+        background: linear-gradient(to top, rgba(250,246,241,1) 25%, rgba(250,246,241,.5) 50%, transparent 75%) !important;
+      }
+      .hero-text {
+        max-width: 100% !important;
+        padding: 1.5rem 1.5rem 4rem !important;
+        justify-content: flex-end !important;
+      }
+      .editorial-grid { grid-template-columns: 1fr 1fr !important; grid-auto-rows: clamp(160px, 38vw, 260px) !important; }
+      .editorial-grid .feat { grid-column: span 2 !important; grid-row: span 1 !important; }
+      .process-row { flex-direction: column !important; gap: 2.5rem !important; }
+      .process-row::before { display: none !important; }
+      .footer-grid { grid-template-columns: 1fr 1fr !important; }
+    }
+    @media(max-width: 480px) {
+      .three-col { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Grain -->
+<div id="grain" aria-hidden="true">
+  <svg width="100%" height="100%">
+    <filter id="gf"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#gf)"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<!-- ══════════════════════════════════
+     NAVBAR
+══════════════════════════════════ -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo" style="line-height:0;display:block;width:92px;height:46px;overflow:hidden;flex-shrink:0;">
+    <img src="./Armony Logo.png" alt="Armony Bakery"
+         style="height:112px;width:auto;display:block;transform:translate(-11px,-31px);">
+  </a>
+
+  <div class="nav-links" style="display:flex;gap:2rem;align-items:center;">
+    <a href="#galeria">Galer&iacute;a</a>
+    <a href="#menu">Men&uacute;</a>
+    <a href="#cotizador">Cotizador</a>
+    <a href="#nosotros">Nosotros</a>
+    <a href="#faq">FAQ</a>
+  </div>
+
+  <div class="nav-cta-wrap" style="display:flex;align-items:center;gap:1.1rem;">
+    <a href="https://instagram.com/armonybakery" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;color:rgba(255,255,255,.55);transition:color .25s;"
+       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'"
+       aria-label="Instagram de Armony Bakery">
+      <i data-lucide="instagram" style="width:18px;height:18px;pointer-events:none;"></i>
+    </a>
+    <a href="https://api.whatsapp.com/send?phone=50760602689" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;color:rgba(255,255,255,.55);transition:color .25s;"
+       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'"
+       aria-label="WhatsApp de Armony Bakery">
+      <i data-lucide="message-circle" style="width:18px;height:18px;pointer-events:none;"></i>
+    </a>
+    <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido"
+       target="_blank" rel="noopener" class="nav-cta">
+      Haz tu pedido
+    </a>
+  </div>
+
+  <button id="ham" aria-label="Men&uacute;">
+    <i data-lucide="menu" style="width:22px;height:22px;color:#fff;" id="ham-icon"></i>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mob" style="position:fixed;inset:0;z-index:490;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;">
+  <button id="mob-x" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;">
+    <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
+  </button>
+  <a href="#galeria"    class="mob-l" style="font-family:var(--sans);font-size:2rem;font-weight:800;color:var(--ink);text-decoration:none;">Galer&iacute;a</a>
+  <a href="#menu"       class="mob-l" style="font-family:var(--sans);font-size:2rem;font-weight:800;color:var(--ink);text-decoration:none;">Men&uacute;</a>
+  <a href="#nosotros"   class="mob-l" style="font-family:var(--sans);font-size:2rem;font-weight:800;color:var(--ink);text-decoration:none;">Nosotros</a>
+  <a href="#cotizador"  class="mob-l" style="font-family:var(--sans);font-size:2rem;font-weight:800;color:var(--ink);text-decoration:none;">Cotizador</a>
+  <a href="#faq"        class="mob-l" style="font-family:var(--sans);font-size:2rem;font-weight:800;color:var(--ink);text-decoration:none;">FAQ</a>
+  <a href="https://api.whatsapp.com/send?phone=50760602689" target="_blank" rel="noopener"
+     style="background:var(--orange);color:#fff;padding:1rem 2.5rem;border-radius:9999px;font-size:1.1rem;font-weight:700;text-decoration:none;font-family:var(--sans);margin-top:.5rem;">
+    Haz tu pedido
+  </a>
+</div>
+
+
+<!-- ══════════════════════════════════
+     HERO — Imagen full-cover con texto encima
+══════════════════════════════════ -->
+<section id="hero" style="height:100dvh;position:relative;overflow:hidden;">
+
+  <!-- ─── Imagen hero: landscape en desktop, portrait en móvil ─── -->
+  <picture>
+    <source srcset="./Hero.png" media="(max-width: 767px)">
+    <img id="hero-img" src="./Hero%205.png"
+         alt="Pastel artesanal Armony Bakery"
+         style="position:absolute;top:0;right:0;height:100%;width:auto;z-index:0;display:block;">
+  </picture>
+
+  <!-- ─── Gradiente para legibilidad del texto ─── -->
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(250,246,241,.88) 32%,rgba(250,246,241,.4) 60%,transparent 82%);z-index:1;pointer-events:none;"></div>
+
+  <!-- ─── Texto encima ─── -->
+  <div class="hero-text" style="position:relative;z-index:10;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:3rem 3.5rem 4.5rem;max-width:58%;">
+    <p id="h-label" style="font-family:var(--mono);font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1.75rem;">Hecho con amor &middot; Panam&aacute;</p>
+    <h1 style="line-height:.92;">
+      <span id="h-l1" style="display:block;font-family:var(--sans);font-weight:800;font-size:clamp(3rem,7.5vw,7.5rem);letter-spacing:-.03em;color:var(--ink);text-transform:uppercase;line-height:.88;">Tu celebraci&oacute;n,</span>
+      <span id="h-l2" style="display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(3.5rem,8.5vw,8.5rem);color:var(--orange);line-height:.95;">perfecta.</span>
+    </h1>
+    <div id="h-bottom" style="margin-top:2.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido%20personalizado"
+         target="_blank" rel="noopener" class="btn">
+        <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+        Haz tu pedido
+      </a>
+      <a href="#galeria" style="font-family:var(--sans);font-size:.8rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.5rem;letter-spacing:.04em;transition:color .3s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+        Ver galer&iacute;a <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div id="h-scroll" style="position:absolute;bottom:2rem;left:27%;transform:translateX(-50%);z-index:10;opacity:0;">
+    <div style="width:1px;height:2.5rem;background:linear-gradient(to bottom,rgba(30,12,10,.25),transparent);"></div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════
+     DECLARACIÓN DE MARCA
+══════════════════════════════════ -->
+<section style="background:var(--ink);padding:7rem 2.5rem;">
+  <div style="max-width:56rem;margin:0 auto;text-align:center;">
+    <p class="reveal" style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.75rem,4vw,3.25rem);color:rgba(255,255,255,.88);line-height:1.35;">
+      &ldquo;No vendemos pasteles.<br>Creamos el centro de tus momentos m&aacute;s importantes.&rdquo;
+    </p>
+    <div class="reveal" style="margin-top:2.5rem;display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <p style="font-family:var(--mono);font-size:2rem;font-weight:400;color:var(--coral);line-height:1;">7+</p>
+        <p style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:.3rem;">A&ntilde;os</p>
+      </div>
+      <div style="width:1px;height:2.5rem;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;">
+        <p style="font-family:var(--mono);font-size:2rem;font-weight:400;color:var(--coral);line-height:1;">97%</p>
+        <p style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:.3rem;">Clientes satisfechos</p>
+      </div>
+      <div style="width:1px;height:2.5rem;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;">
+        <p style="font-family:var(--mono);font-size:2rem;font-weight:400;color:var(--coral);line-height:1;">&lt;10'</p>
+        <p style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:.3rem;">Tiempo de respuesta</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     GALERÍA — PASTELES DE CUMPLEAÑOS (CAROUSEL 3D)
+══════════════════════════════════ -->
+<section id="galeria" class="section">
+  <div class="container">
+
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <span class="label">Galer&iacute;a</span>
+        <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(3rem,6vw,5.5rem);line-height:.95;color:var(--ink);">Pasteles de<br>cumplea&ntilde;os.</h2>
+      </div>
+      <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20vi%20la%20galeria%20y%20me%20gustaria%20un%20pedido"
+         target="_blank" rel="noopener" class="btn reveal" style="margin-bottom:.5rem;">
+        Pedir el m&iacute;o &rarr;
+      </a>
+    </div>
+
+    <!-- STAGE: overflow hidden, todas las tarjetas flotan dentro -->
+    <div id="cake-viewer" class="reveal" style="position:relative;height:clamp(440px,74vh,840px);overflow:hidden;border-radius:2rem;">
+
+      <!-- 9 tarjetas — todas con la misma base, GSAP les da posición y escala -->
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%203.png" alt="Pastel 1" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%204.png" alt="Pastel 2" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%205.png" alt="Pastel 3" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%206.png" alt="Pastel 4" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%207.png" alt="Pastel 5" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%208.png" alt="Pastel 6" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%209.png" alt="Pastel 7" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%2010.png" alt="Pastel 8" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%2011.png" alt="Pastel 9" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%2012.png" alt="Pastel 10" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%2013.png" alt="Pastel 11" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="cake-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(30,12,10,.15);cursor:pointer;">
+        <img src="./Cake%2014.png" alt="Pastel 12" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+
+      <!-- Flechas -->
+      <button onclick="cakeNav(-1)" aria-label="Anterior" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(250,246,241,.92);backdrop-filter:blur(10px);border:1px solid rgba(30,12,10,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(30,12,10,.12);transition:all .25s;">
+        <i data-lucide="chevron-left" style="width:20px;height:20px;color:var(--ink);pointer-events:none;"></i>
+      </button>
+      <button onclick="cakeNav(1)" aria-label="Siguiente" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(250,246,241,.92);backdrop-filter:blur(10px);border:1px solid rgba(30,12,10,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(30,12,10,.12);transition:all .25s;">
+        <i data-lucide="chevron-right" style="width:20px;height:20px;color:var(--ink);pointer-events:none;"></i>
+      </button>
+
+      <!-- Dots + contador -->
+      <div style="position:absolute;bottom:1.25rem;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:.45rem;">
+        <div class="cake-dot" onclick="cakeGoTo(0)" style="height:.35rem;width:1.5rem;border-radius:9999px;background:var(--ink);opacity:1;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(1)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(2)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(3)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(4)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(5)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(6)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(7)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <div class="cake-dot" onclick="cakeGoTo(8)" style="height:.35rem;width:.45rem;border-radius:9999px;background:var(--ink);opacity:.22;transition:all .4s;cursor:pointer;"></div>
+        <span style="font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;color:var(--muted);margin-left:.6rem;" id="cake-count">01 / 09</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     CLOSE-UP — Calidad artesanal (CAROUSEL)
+══════════════════════════════════ -->
+<section style="background:var(--ink);padding:7rem 2.5rem;">
+  <div class="container">
+
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <span class="label" style="color:rgba(255,255,255,.35);">Detalle artesanal</span>
+        <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.5rem,5vw,4.5rem);line-height:.95;color:#fff;">La calidad que no<br>se ve a simple vista.</h2>
+      </div>
+    </div>
+
+    <!-- STAGE -->
+    <div id="closeup-viewer" class="reveal" style="position:relative;height:clamp(400px,68vh,800px);overflow:hidden;border-radius:2rem;">
+
+      <div class="closeup-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Close%20up%201.png" alt="Detalle 1" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="closeup-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Close%20up%202.png" alt="Detalle 2" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="closeup-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Close%20up%203.png" alt="Detalle 3" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="closeup-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Close%20up%204.png" alt="Detalle 4" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+
+      <!-- Flechas -->
+      <button onclick="closeupNav(-1)" aria-label="Anterior" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.25);transition:all .25s;">
+        <i data-lucide="chevron-left" style="width:20px;height:20px;color:#fff;pointer-events:none;"></i>
+      </button>
+      <button onclick="closeupNav(1)" aria-label="Siguiente" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.25);transition:all .25s;">
+        <i data-lucide="chevron-right" style="width:20px;height:20px;color:#fff;pointer-events:none;"></i>
+      </button>
+
+      <!-- Dots + contador -->
+      <div style="position:absolute;bottom:1.25rem;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:.45rem;">
+        <div class="closeup-dot" onclick="closeupGoTo(0)" style="height:.35rem;width:1.5rem;border-radius:9999px;background:#fff;opacity:1;transition:all .4s;cursor:pointer;"></div>
+        <div class="closeup-dot" onclick="closeupGoTo(1)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <div class="closeup-dot" onclick="closeupGoTo(2)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <div class="closeup-dot" onclick="closeupGoTo(3)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <span style="font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;color:rgba(255,255,255,.35);margin-left:.6rem;" id="closeup-count">01 / 04</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     POSTRES (CAROUSEL 3D)
+══════════════════════════════════ -->
+<section id="postres" class="section" style="background:var(--ink);">
+  <div class="container">
+
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <span class="label" style="color:rgba(255,255,255,.35);">Otras categor&iacute;as</span>
+        <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.75rem,5.5vw,5rem);line-height:.95;color:#fff;">Postres<br>artesanales.</h2>
+      </div>
+      <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20sus%20postres"
+         target="_blank" rel="noopener" class="btn reveal" style="margin-bottom:.5rem;background:var(--coral);">
+        Consultar sin compromiso
+      </a>
+    </div>
+
+    <!-- STAGE -->
+    <div id="postre-viewer" class="reveal" style="position:relative;height:clamp(400px,68vh,800px);overflow:hidden;border-radius:2rem;">
+
+      <!-- 5 tarjetas -->
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%201.png" alt="Postre 1" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%202.png" alt="Postre 2" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%203.png" alt="Postre 3" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%204.png" alt="Postre 4" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%205.png" alt="Postre 5" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%206.png" alt="Postre 6" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+      <div class="postre-slide" style="position:absolute;width:50%;height:86%;top:7%;left:25%;border-radius:2rem;overflow:hidden;background:var(--warm);box-shadow:0 20px 70px rgba(0,0,0,.35);cursor:pointer;">
+        <img src="./Postres%207.png" alt="Postre 7" style="width:100%;height:100%;object-fit:contain;padding:1.5rem;">
+      </div>
+
+      <!-- Flechas -->
+      <button onclick="postreNav(-1)" aria-label="Anterior" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.25);transition:all .25s;">
+        <i data-lucide="chevron-left" style="width:20px;height:20px;color:#fff;pointer-events:none;"></i>
+      </button>
+      <button onclick="postreNav(1)" aria-label="Siguiente" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);z-index:30;width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.25);transition:all .25s;">
+        <i data-lucide="chevron-right" style="width:20px;height:20px;color:#fff;pointer-events:none;"></i>
+      </button>
+
+      <!-- Dots + contador -->
+      <div style="position:absolute;bottom:1.25rem;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:.45rem;">
+        <div class="postre-dot" onclick="postreGoTo(0)" style="height:.35rem;width:1.5rem;border-radius:9999px;background:#fff;opacity:1;transition:all .4s;cursor:pointer;"></div>
+        <div class="postre-dot" onclick="postreGoTo(1)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <div class="postre-dot" onclick="postreGoTo(2)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <div class="postre-dot" onclick="postreGoTo(3)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <div class="postre-dot" onclick="postreGoTo(4)" style="height:.35rem;width:.45rem;border-radius:9999px;background:#fff;opacity:.28;transition:all .4s;cursor:pointer;"></div>
+        <span style="font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;color:rgba(255,255,255,.35);margin-left:.6rem;" id="postre-count">01 / 05</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     NOSOTROS — Magazine spread
+══════════════════════════════════ -->
+<section id="nosotros" style="background:var(--warm);padding:8rem 2.5rem;">
+  <div class="container">
+
+    <!-- Pull quote -->
+    <div class="reveal" style="text-align:center;max-width:48rem;margin:0 auto 5rem;">
+      <span class="label">Nuestra historia</span>
+      <p style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.75rem,4vw,3rem);color:var(--ink);line-height:1.35;">&ldquo;Armony Bakery naci&oacute; de una sola raz&oacute;n: el amor por servir. No entregamos pasteles &mdash; entregamos experiencias que se recuerdan.&rdquo;</p>
+    </div>
+
+    <!-- Foto + texto -->
+    <div class="two-col" style="display:grid;grid-template-columns:5fr 7fr;gap:5rem;align-items:center;">
+
+      <div id="g-photo" style="position:relative;opacity:0;">
+        <img src="./Sobre%20nosotros.png" alt="El equipo de Armony Bakery"
+             style="width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;border-radius:2rem;box-shadow:0 40px 100px rgba(30,12,10,.15);">
+        <div style="position:absolute;bottom:-1.5rem;right:-1.5rem;background:var(--orange);color:#fff;padding:1.25rem 1.5rem;border-radius:1.5rem;box-shadow:0 12px 35px rgba(236,82,40,.3);">
+          <p style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;opacity:.9;margin-bottom:.25rem;">En el mercado</p>
+          <p style="font-family:var(--serif);font-size:2.5rem;font-weight:300;font-style:italic;line-height:1;">7+</p>
+          <p style="font-family:var(--mono);font-size:.65rem;font-weight:400;">a&ntilde;os</p>
+        </div>
+      </div>
+
+      <div id="g-text" style="opacity:0;">
+        <p style="font-family:var(--sans);font-size:1.05rem;line-height:1.85;color:var(--ink);opacity:.8;margin-bottom:1.5rem;">Llevamos m&aacute;s de 7 a&ntilde;os convirtiendo celebraciones en recuerdos. Cada pastel es elaborado desde cero, con ingredientes de la m&aacute;s alta calidad, pensando en el momento especial de quien lo va a recibir.</p>
+        <p style="font-family:var(--sans);font-size:1.05rem;line-height:1.85;color:var(--ink);opacity:.8;margin-bottom:1.5rem;">Lo que m&aacute;s nos llena son los mensajes que recibimos despu&eacute;s de cada celebraci&oacute;n: <em style="color:var(--orange);font-style:italic;">&ldquo;El pastel estuvo delicioso, me encant&oacute; la presentaci&oacute;n.&rdquo;</em> Esos mensajes son el coraz&oacute;n de lo que hacemos.</p>
+        <p style="font-family:var(--sans);font-size:1.05rem;line-height:1.85;color:var(--ink);opacity:.8;margin-bottom:3rem;">Cada cliente que nos prueba se convierte en parte de nuestra familia. Y siempre regresa.</p>
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido"
+           target="_blank" rel="noopener" class="btn">
+          <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+          Haz tu pedido
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- ══════════════════════════════════
+     COTIZACIONES & COLOCADAS
+══════════════════════════════════ -->
+<section id="cotizaciones" class="section" style="background:var(--warm);">
+  <div class="container">
+
+    <div class="reveal" style="text-align:center;max-width:44rem;margin:0 auto 5rem;">
+      <span class="label">Cotizaciones &amp; colocadas</span>
+      <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.75rem,5.5vw,5rem);line-height:.95;color:var(--ink);">Tu pastel,<br>a tu medida.</h2>
+      <p style="font-family:var(--sans);font-size:1rem;line-height:1.8;color:var(--muted);margin-top:1.5rem;">Cada pastel es &uacute;nico &mdash; por eso el precio tambi&eacute;n lo es. Escr&iacute;benos y te respondemos en menos de 10 minutos.</p>
+    </div>
+
+    <div class="two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+
+      <!-- COTIZACIONES -->
+      <div class="reveal" style="background:var(--cream);border-radius:2rem;padding:3rem;height:100%;">
+        <div style="width:3rem;height:3rem;border-radius:.875rem;background:rgba(236,82,40,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem;">
+          <i data-lucide="calculator" style="width:20px;height:20px;color:var(--orange);"></i>
+        </div>
+        <span class="label" style="color:var(--coral);">01 &mdash; Cotizaciones</span>
+        <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:var(--ink);margin-bottom:1rem;line-height:1.1;">Sin sorpresas,<br>sin compromiso.</h3>
+        <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);margin-bottom:1.75rem;">El precio var&iacute;a seg&uacute;n dise&ntilde;o, tama&ntilde;o, sabor y relleno. Para darte una cotizaci&oacute;n exacta solo necesitamos:</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.85rem;margin-bottom:2.5rem;">
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(236,82,40,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--orange);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:var(--ink);">La ocasi&oacute;n (cumplea&ntilde;os, boda, baby shower&hellip;)</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(236,82,40,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--orange);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:var(--ink);">N&uacute;mero de porciones o tama&ntilde;o aproximado</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(236,82,40,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--orange);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:var(--ink);">Dise&ntilde;o o referencia visual (si tienes idea)</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(236,82,40,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--orange);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:var(--ink);">Fecha del evento</span>
+          </li>
+        </ul>
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20quisiera%20una%20cotizaci%C3%B3n%20para%20un%20pastel"
+           target="_blank" rel="noopener" class="btn">
+          <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+          Solicitar cotizaci&oacute;n
+        </a>
+      </div>
+
+      <!-- COLOCADAS / ENTREGA -->
+      <div class="reveal" style="background:var(--ink);border-radius:2rem;padding:3rem;height:100%;">
+        <div style="width:3rem;height:3rem;border-radius:.875rem;background:rgba(247,131,141,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem;">
+          <i data-lucide="map-pin" style="width:20px;height:20px;color:var(--coral);"></i>
+        </div>
+        <span class="label" style="color:var(--coral);">02 &mdash; Entregas a domicilio</span>
+        <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:#fff;margin-bottom:1rem;line-height:1.1;">Llega perfecto,<br>listo para brillar.</h3>
+        <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:rgba(255,255,255,.55);margin-bottom:1.75rem;">Coordinamos la entrega directamente en tu evento. Tu pastel llega en el momento exacto, en perfectas condiciones, listo para el gran momento.</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.85rem;margin-bottom:2.5rem;">
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(247,131,141,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--coral);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:rgba(255,255,255,.7);">Entrega puntual en la direcci&oacute;n de tu evento</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(247,131,141,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--coral);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:rgba(255,255,255,.7);">Montaje y colocaci&oacute;n incluidos en el precio</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(247,131,141,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--coral);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:rgba(255,255,255,.7);">Coordinaci&oacute;n directa por WhatsApp d&iacute;as antes</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:.75rem;">
+            <span style="width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(247,131,141,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;">
+              <i data-lucide="check" style="width:11px;height:11px;color:var(--coral);"></i>
+            </span>
+            <span style="font-family:var(--sans);font-size:.9rem;color:rgba(255,255,255,.7);">97% de clientes satisfechos &mdash; 132 rese&ntilde;as verificadas</span>
+          </li>
+        </ul>
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20quisiera%20coordinar%20la%20entrega%20de%20mi%20pastel"
+           target="_blank" rel="noopener" class="btn" style="background:var(--coral);">
+          <i data-lucide="map-pin" style="width:16px;height:16px;"></i>
+          Coordinar entrega
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     B — COTIZADOR (trigger)
+══════════════════════════════════ -->
+<section id="cotizador" style="background:var(--ink);padding:7rem 2.5rem;">
+  <div style="max-width:52rem;margin:0 auto;text-align:center;">
+    <div class="reveal">
+      <span class="label" style="color:rgba(255,255,255,.6);">Cotizador</span>
+      <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.75rem,5.5vw,5rem);line-height:.95;color:#fff;margin-bottom:1.25rem;">¿Cu&aacute;nto cuesta<br>tu pastel?</h2>
+      <p style="font-family:var(--sans);font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:2.5rem;">Elige tu bizcocho, relleno y tama&ntilde;o &mdash;<br>te damos un precio base estimado al instante.</p>
+      <button onclick="openCotModal()" class="btn" style="font-size:1rem;padding:1.1rem 2.75rem;">
+        <i data-lucide="calculator" style="width:18px;height:18px;"></i>
+        Cotizar mi pastel
+      </button>
+      <p style="font-family:var(--sans);font-size:.8rem;color:rgba(255,255,255,.65);margin-top:1.25rem;">
+        &iquest;Ya sabes lo que quieres? &nbsp;
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido%20personalizado"
+           target="_blank" rel="noopener"
+           style="color:var(--coral);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(247,131,141,.4);transition:border-color .2s;"
+           onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='rgba(247,131,141,.4)'">
+          Escr&iacute;benos directo &rarr;
+        </a>
+      </p>
+      <p style="font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-top:1.5rem;line-height:1.7;max-width:28rem;margin-left:auto;margin-right:auto;">
+        Pasteles con buttercream o fondant tienen precios diferenciados &mdash;
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20quisiera%20cotizar%20un%20pastel%20especial%20con%20buttercream%20o%20fondant"
+           target="_blank" rel="noopener"
+           style="color:var(--coral);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(247,131,141,.35);"
+           onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='rgba(247,131,141,.35)'">
+          cont&aacute;ctanos por WhatsApp &rarr;
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     C — FAQ
+══════════════════════════════════ -->
+<section id="faq" class="section" style="background:var(--warm);">
+  <div class="container">
+    <div style="max-width:52rem;margin:0 auto;">
+
+      <div class="reveal" style="margin-bottom:3.5rem;">
+        <span class="label">Preguntas frecuentes</span>
+        <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.5rem,5vw,4.5rem);line-height:.95;color:var(--ink);">Todo lo que<br>necesitas saber.</h2>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(30,12,10,.1);">
+
+        <div class="faq-item reveal" style="border-bottom:1px solid rgba(30,12,10,.1);">
+          <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;">
+            <span style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink);">¿Con cu&aacute;nta anticipaci&oacute;n debo hacer mi pedido?</span>
+            <span class="faq-icon" style="flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid rgba(30,12,10,.2);display:flex;align-items:center;justify-content:center;transition:all .3s;">
+              <i data-lucide="plus" style="width:14px;height:14px;color:var(--ink);transition:transform .3s;"></i>
+            </span>
+          </button>
+          <div class="faq-a" style="overflow:hidden;max-height:0;transition:max-height .4s ease;">
+            <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);padding-bottom:1.5rem;">Tus pedidos se deben hacer con un m&iacute;nimo de <strong>72 horas de anticipaci&oacute;n</strong>. Para fechas especiales o pasteles muy elaborados, te recomendamos contactarnos con m&aacute;s tiempo para asegurar tu fecha.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="border-bottom:1px solid rgba(30,12,10,.1);">
+          <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;">
+            <span style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink);">¿Hacen entregas a domicilio?</span>
+            <span class="faq-icon" style="flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid rgba(30,12,10,.2);display:flex;align-items:center;justify-content:center;transition:all .3s;">
+              <i data-lucide="plus" style="width:14px;height:14px;color:var(--ink);transition:transform .3s;"></i>
+            </span>
+          </button>
+          <div class="faq-a" style="overflow:hidden;max-height:0;transition:max-height .4s ease;">
+            <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);padding-bottom:1.5rem;">S&iacute;, hacemos entregas en <strong>distintos sectores de la Ciudad de Panam&aacute;</strong>. El costo del servicio de entrega var&iacute;a seg&uacute;n la distancia y el &aacute;rea. Cons&uacute;ltanos tu zona al hacer el pedido y te confirmamos la disponibilidad y el costo.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="border-bottom:1px solid rgba(30,12,10,.1);">
+          <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;">
+            <span style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink);">¿C&oacute;mo se realiza el pago?</span>
+            <span class="faq-icon" style="flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid rgba(30,12,10,.2);display:flex;align-items:center;justify-content:center;transition:all .3s;">
+              <i data-lucide="plus" style="width:14px;height:14px;color:var(--ink);transition:transform .3s;"></i>
+            </span>
+          </button>
+          <div class="faq-a" style="overflow:hidden;max-height:0;transition:max-height .4s ease;">
+            <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);padding-bottom:1.5rem;">Aceptamos <strong>transferencia bancaria, Yappy y tarjeta de cr&eacute;dito</strong>. Al confirmar tu pedido te indicamos los detalles del pago y cualquier dep&oacute;sito requerido seg&uacute;n el tama&ntilde;o del pedido.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="border-bottom:1px solid rgba(30,12,10,.1);">
+          <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;">
+            <span style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink);">¿Puedo enviar una referencia de dise&ntilde;o?</span>
+            <span class="faq-icon" style="flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid rgba(30,12,10,.2);display:flex;align-items:center;justify-content:center;transition:all .3s;">
+              <i data-lucide="plus" style="width:14px;height:14px;color:var(--ink);transition:transform .3s;"></i>
+            </span>
+          </button>
+          <div class="faq-a" style="overflow:hidden;max-height:0;transition:max-height .4s ease;">
+            <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);padding-bottom:1.5rem;">¡Por supuesto! De hecho, es <strong>lo m&aacute;s com&uacute;n</strong>. Puedes enviarnos fotos de Instagram, Pinterest o cualquier otra referencia visual. Hacemos los pasteles basados en tus ideas y solicitudes &mdash; tu visi&oacute;n es nuestro punto de partida.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="border-bottom:1px solid rgba(30,12,10,.1);">
+          <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;">
+            <span style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink);">¿Por qu&eacute; el sabor de Armony es diferente?</span>
+            <span class="faq-icon" style="flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid rgba(30,12,10,.2);display:flex;align-items:center;justify-content:center;transition:all .3s;">
+              <i data-lucide="plus" style="width:14px;height:14px;color:var(--ink);transition:transform .3s;"></i>
+            </span>
+          </button>
+          <div class="faq-a" style="overflow:hidden;max-height:0;transition:max-height .4s ease;">
+            <p style="font-family:var(--sans);font-size:.95rem;line-height:1.8;color:var(--muted);padding-bottom:1.5rem;">Cada pastel se elabora desde cero con ingredientes de alta calidad y un proceso <strong>100% artesanal</strong>. No usamos mezclas industriales. Ese proceso es lo que hace que el sabor sea &uacute;nico &mdash; y lo que hace que nuestros clientes siempre regresen.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="reveal" style="text-align:center;margin-top:3rem;">
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--muted);margin-bottom:1.25rem;">¿Tienes otra pregunta? Escr&iacute;benos directamente.</p>
+        <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20tengo%20una%20pregunta%20sobre%20un%20pedido"
+           target="_blank" rel="noopener" class="btn">
+          <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+          Escribirnos por WhatsApp
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     TESTIMONIOS
+══════════════════════════════════ -->
+<section id="testimonios" style="background:var(--ink);padding:8rem 2.5rem;">
+  <div class="container">
+
+    <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+      <span class="label" style="color:rgba(255,255,255,.65);">Lo que dicen</span>
+      <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(2.5rem,5vw,4.5rem);line-height:.95;color:#fff;">Celebraciones<br>que se recuerdan.</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;" class="three-col">
+
+      <div class="reveal" style="padding:2.5rem;border:1px solid rgba(255,255,255,.08);border-radius:1.5rem;position:relative;">
+        <div style="display:flex;gap:.18rem;margin-bottom:1.25rem;">
+          <span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span>
+        </div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.75;color:rgba(255,255,255,.75);margin-bottom:2rem;">&ldquo;Los bizcochos estaban h&uacute;medos y el sabor tan balanceado que mi mam&aacute; diab&eacute;tica comi&oacute; y no le subi&oacute; el az&uacute;car. A toda mi familia le encant&oacute; y me pidieron el contacto.&rdquo;</p>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div style="width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(247,131,141,.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--coral);">&#10003;</span>
+          </div>
+          <div>
+            <p style="font-family:var(--sans);font-weight:600;font-size:.85rem;color:#fff;">Cliente verificada ✓</p>
+            <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Encuesta oficial &middot; Panam&aacute;</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="padding:2.5rem;border:1px solid rgba(247,131,141,.25);border-radius:1.5rem;position:relative;">
+        <div style="display:flex;gap:.18rem;margin-bottom:1.25rem;">
+          <span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span>
+        </div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.75;color:rgba(255,255,255,.75);margin-bottom:2rem;">&ldquo;M&aacute;s bello y delicioso de lo que esper&aacute;bamos. La apariencia espectacular: tal cual lo ped&iacute; en la referencia, tal cual me lo entregaron.&rdquo;</p>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div style="width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(247,131,141,.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--coral);">&#10003;</span>
+          </div>
+          <div>
+            <p style="font-family:var(--sans);font-weight:600;font-size:.85rem;color:#fff;">Cliente verificada ✓</p>
+            <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Encuesta oficial &middot; Panam&aacute;</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="padding:2.5rem;border:1px solid rgba(255,255,255,.08);border-radius:1.5rem;position:relative;">
+        <div style="display:flex;gap:.18rem;margin-bottom:1.25rem;">
+          <span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span><span style="color:var(--coral);font-size:1rem;">&#9733;</span>
+        </div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.75;color:rgba(255,255,255,.75);margin-bottom:2rem;">&ldquo;El sabor no estaba empalagoso &mdash; la humedad del pastel, la textura, fue toda una delicia para el paladar. Lo recomiendo sin dudarlo.&rdquo;</p>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div style="width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(247,131,141,.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--coral);">&#10003;</span>
+          </div>
+          <div>
+            <p style="font-family:var(--sans);font-weight:600;font-size:.85rem;color:#fff;">Cliente verificado ✓</p>
+            <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);">Encuesta oficial &middot; Panam&aacute;</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     CIERRE CINEMATOGRÁFICO
+══════════════════════════════════ -->
+<section id="cierre" style="height:90dvh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+  <img src="./Cake%2011.png" alt=""
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:brightness(.35);">
+  <div style="position:relative;z-index:1;text-align:center;padding:2rem;max-width:42rem;">
+    <div class="reveal">
+      <span class="label" style="color:rgba(255,255,255,.4);display:block;text-align:center;">Tu momento nos importa</span>
+      <h2 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(3rem,7vw,6.5rem);line-height:.92;color:#fff;margin-bottom:2rem;">Tu celebraci&oacute;n merece el mejor pastel.</h2>
+      <a href="https://api.whatsapp.com/send?phone=50760602689&text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido%20personalizado"
+         target="_blank" rel="noopener" class="btn" style="font-size:1rem;padding:1.1rem 2.5rem;">
+        <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+        Haz tu pedido
+      </a>
+      <p style="font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:1.25rem;">Respuesta en menos de 10 minutos</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer style="background:#0d0604;padding:4rem 2.5rem 2rem;">
+  <div class="container">
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;">
+
+      <div>
+        <div style="width:108px;height:56px;overflow:hidden;margin-bottom:.5rem;">
+          <img src="./Armony Logo.png" alt="Armony Bakery"
+               style="height:130px;width:auto;display:block;transform:translate(-13px,-36px);">
+        </div>
+        <p style="font-family:var(--sans);font-size:.8rem;line-height:1.7;color:rgba(255,255,255,.72);max-width:16rem;margin-top:.75rem;font-size:.92rem;">Pasteles artesanales y postres hechos con amor para los momentos que no se repiten. Panam&aacute;.</p>
+      </div>
+
+      <div>
+        <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-bottom:1.25rem;">Navegaci&oacute;n</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <a href="#galeria"     style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">Galer&iacute;a</a>
+          <a href="#menu"        style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">Men&uacute;</a>
+          <a href="#nosotros"    style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">Nosotros</a>
+          <a href="#cotizador"   style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">Cotizador</a>
+          <a href="#faq"         style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">FAQ</a>
+          <a href="#testimonios" style="font-family:var(--sans);font-size:.92rem;color:rgba(255,255,255,.78);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.78)'">Testimonios</a>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-bottom:1.25rem;">Contacto</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <a href="https://api.whatsapp.com/send?phone=50760602689" target="_blank" rel="noopener"
+             style="font-family:var(--sans);font-size:.8rem;color:rgba(255,255,255,.4);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'">
+            <i data-lucide="message-circle" style="width:20px;height:20px;flex-shrink:0;"></i> WhatsApp
+          </a>
+          <a href="https://instagram.com/armonybakery" target="_blank" rel="noopener"
+             style="font-family:var(--sans);font-size:.8rem;color:rgba(255,255,255,.4);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'">
+            <i data-lucide="instagram" style="width:20px;height:20px;flex-shrink:0;"></i> Instagram
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-bottom:1.25rem;">Pedidos</p>
+        <p style="font-family:var(--sans);font-size:.8rem;line-height:1.7;color:rgba(255,255,255,.72);font-size:.92rem;">Pedidos con anticipaci&oacute;n. Cont&aacute;ctanos para coordinar.</p>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <p style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5);">&copy; 2026 Armony Bakery &middot; Panam&aacute;</p>
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <div style="width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse-g 2s infinite;"></div>
+        <p style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5);">Aceptando pedidos</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════
+     MODAL COTIZADOR
+══════════════════════════════════ -->
+<div id="cot-modal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(10,3,2,.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1.25rem;">
+  <div style="background:var(--cream);border-radius:2rem;width:100%;max-width:500px;max-height:90dvh;overflow-y:auto;position:relative;padding:2.5rem 2.5rem 2rem;">
+
+    <!-- Cerrar -->
+    <button onclick="closeCotModal()" style="position:absolute;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(30,12,10,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;" onmouseover="this.style.background='rgba(30,12,10,.15)'" onmouseout="this.style.background='rgba(30,12,10,.08)'">
+      <i data-lucide="x" style="width:15px;height:15px;color:var(--ink);pointer-events:none;"></i>
+    </button>
+
+    <!-- Barra de progreso -->
+    <div style="display:flex;gap:.35rem;margin-bottom:2.25rem;margin-right:2rem;">
+      <div id="mp1" style="flex:1;height:3px;border-radius:9999px;background:var(--orange);transition:background .4s;"></div>
+      <div id="mp2" style="flex:1;height:3px;border-radius:9999px;background:rgba(30,12,10,.12);transition:background .4s;"></div>
+      <div id="mp3" style="flex:1;height:3px;border-radius:9999px;background:rgba(30,12,10,.12);transition:background .4s;"></div>
+      <div id="mp4" style="flex:1;height:3px;border-radius:9999px;background:rgba(30,12,10,.12);transition:background .4s;"></div>
+    </div>
+
+    <!-- PASO 1: PERSONAS -->
+    <div id="ms1" class="modal-step">
+      <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin-bottom:.75rem;">Paso 1 de 4</p>
+      <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:var(--ink);line-height:1.1;margin-bottom:.5rem;">&iquest;Cu&aacute;ntas personas van a tu celebraci&oacute;n?</h3>
+      <p style="font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-bottom:1.75rem;">Elige el rango m&aacute;s cercano y te recomendamos el tama&ntilde;o ideal.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;">
+        <button class="m-pers-btn" onclick="mSelectPers('s1',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">Hasta 8</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 6"&times;3"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s2',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">10 a 12</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 8"&times;3"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s3',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">14 a 16</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 10"&times;3"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s4',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">18 a 20</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 6"&times;6"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s5',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">30 a 35</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 8"&times;5"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s6',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">50 o m&aacute;s</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 10"&times;5"</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 2: BIZCOCHO -->
+    <div id="ms2" class="modal-step" style="display:none;">
+      <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin-bottom:.75rem;">Paso 2 de 4</p>
+      <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:var(--ink);line-height:1.1;margin-bottom:.5rem;">&iquest;Qu&eacute; bizcocho prefieres?</h3>
+      <p style="font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-bottom:1.75rem;">Cada sabor es una personalidad diferente.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="m-biz-btns"></div>
+    </div>
+
+    <!-- PASO 3: RELLENO -->
+    <div id="ms3" class="modal-step" style="display:none;">
+      <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin-bottom:.75rem;">Paso 3 de 4</p>
+      <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:var(--ink);line-height:1.1;margin-bottom:.5rem;">&iquest;Qu&eacute; relleno?</h3>
+      <p style="font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-bottom:1.75rem;">Opciones disponibles para tu bizcocho seleccionado.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="m-rel-btns"></div>
+    </div>
+
+    <!-- PASO 4: COBERTURA -->
+    <div id="ms4" class="modal-step" style="display:none;">
+      <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin-bottom:.75rem;">Paso 4 de 4</p>
+      <h3 style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:2rem;color:var(--ink);line-height:1.1;margin-bottom:.5rem;">&iquest;Qu&eacute; cobertura?</h3>
+      <p style="font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-bottom:1.75rem;">El acabado final de tu pastel.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="m-cob-btns"></div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="msresult" class="modal-step" style="display:none;text-align:center;">
+      <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:rgba(236,82,40,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+        <i data-lucide="check" style="width:20px;height:20px;color:var(--orange);"></i>
+      </div>
+      <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;">Tu pastel personalizado</p>
+      <p id="m-price" style="font-family:var(--serif);font-style:italic;font-size:5.5rem;font-weight:300;color:var(--orange);line-height:1;margin-bottom:.25rem;">$00</p>
+      <p id="m-size-label" style="font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-bottom:1.5rem;"></p>
+      <div id="m-summary" style="background:#fff;border-radius:1.25rem;padding:1.25rem;margin-bottom:1.75rem;text-align:left;display:flex;flex-direction:column;gap:.65rem;"></div>
+      <a id="m-wa-btn" href="#" target="_blank" rel="noopener" class="btn" style="width:100%;justify-content:center;font-size:.95rem;padding:1rem 1.5rem;">
+        <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+        Pedir este pastel por WhatsApp
+      </a>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:1rem;flex-wrap:wrap;">
+        <button onclick="mShowStep(4)" style="background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:.8rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:.3rem;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+          <i data-lucide="arrow-left" style="width:13px;height:13px;pointer-events:none;"></i> Cambiar selecci&oacute;n
+        </button>
+        <span style="font-family:var(--mono);font-size:.5rem;color:rgba(30,12,10,.2);">|</span>
+        <button onclick="mReset()" style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:.55rem;color:var(--coral);letter-spacing:.1em;text-decoration:underline;">Empezar de nuevo</button>
+      </div>
+      <p style="font-family:var(--mono);font-size:.52rem;letter-spacing:.08em;color:rgba(30,12,10,.3);margin-top:.65rem;line-height:1.6;text-align:center;">El precio puede variar seg&uacute;n la decoraci&oacute;n.</p>
+    </div>
+
+    <!-- Navegación -->
+    <div id="m-nav" style="display:flex;justify-content:space-between;align-items:center;margin-top:2rem;gap:1rem;">
+      <button id="m-back-btn" onclick="mBack()" style="font-family:var(--sans);font-weight:600;font-size:.85rem;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:.35rem;padding:.5rem 0;">
+        <i data-lucide="arrow-left" style="width:14px;height:14px;pointer-events:none;"></i> Atr&aacute;s
+      </button>
+      <span></span>
+      <button id="m-next-btn" onclick="mNext()" disabled
+        style="font-family:var(--sans);font-weight:700;font-size:.85rem;background:var(--ink);color:#fff;border:none;border-radius:9999px;padding:.7rem 1.75rem;cursor:pointer;opacity:.35;transition:opacity .25s;display:flex;align-items:center;gap:.4rem;">
+        Siguiente <i data-lucide="arrow-right" style="width:14px;height:14px;pointer-events:none;"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  @keyframes pulse-g { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+  /* ── COTIZADOR PILLS ── */
+  .cot-pill {
+    font-family: var(--sans); font-weight: 600; font-size: .8rem;
+    letter-spacing: .03em; padding: .55rem 1.25rem; border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,.2); background: transparent;
+    color: rgba(255,255,255,.55); cursor: pointer; transition: all .2s;
+  }
+  .cot-pill:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+  .cot-pill.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  .cot-size {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 1.25rem; padding: 1.25rem; cursor: pointer; transition: all .25s; text-align:center;
+  }
+  .cot-size:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.08); }
+  .cot-size.active { border-color: var(--coral); background: rgba(247,131,141,.08); }
+
+  /* ── FAQ ── */
+  .faq-q:hover .faq-icon { background: rgba(30,12,10,.06); }
+</style>
+
+
+<!-- ══════════════════════════════════
+     SCRIPTS
+══════════════════════════════════ -->
+<script>
+  lucide.createIcons();
+
+  // Navbar
+  const nav = document.getElementById('nav');
+  const hamIcon = document.getElementById('ham-icon');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('solid', scrollY > 60);
+  }, { passive:true });
+  // Ham icon siempre blanco (navbar siempre oscura)
+  if (hamIcon) hamIcon.style.color = '#fff';
+
+  // Mobile menu
+  const mob = document.getElementById('mob');
+  document.getElementById('ham').addEventListener('click', () => mob.classList.add('open'));
+  document.getElementById('mob-x').addEventListener('click', () => mob.classList.remove('open'));
+  document.querySelectorAll('.mob-l').forEach(l => l.addEventListener('click', () => mob.classList.remove('open')));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    });
+  });
+
+  // Progress bar
+  const prog = document.getElementById('prog');
+  window.addEventListener('scroll', () => {
+    prog.style.width = (scrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
+  }, { passive:true });
+
+  // GSAP
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.context(() => {
+    // Hero entrance — cinematic
+    const tl = gsap.timeline({ delay: .2 });
+    tl.from('#h-label',  { opacity:0, y:14, duration:.8, ease:'power2.out' })
+      .from('#h-l1',     { opacity:0, y:60, duration:1.1, ease:'power4.out' }, '-=.4')
+      .from('#h-l2',     { opacity:0, y:60, duration:1.1, ease:'power4.out' }, '-=.7')
+      .from('#h-bottom', { opacity:0, y:20, duration:.8, ease:'power2.out' }, '-=.4')
+      .from('#hero-img', { opacity:0, x:40, duration:1.2, ease:'power3.out' }, '-=.8')
+      .to('#h-scroll',   { opacity:1, duration:.8, ease:'power2.out' }, '-=.3');
+
+    // Nosotros slide-in
+    ScrollTrigger.create({
+      trigger:'#nosotros', start:'top 75%', once:true,
+      onEnter: () => {
+        gsap.fromTo('#g-photo', { x:-50, opacity:0 }, { x:0, opacity:1, duration:1.1, ease:'power3.out' });
+        gsap.fromTo('#g-text',  { x:50,  opacity:0 }, { x:0, opacity:1, duration:1.1, ease:'power3.out', delay:.2 });
+      }
+    });
+
+    // Generic reveals
+    document.querySelectorAll('.reveal').forEach(el => {
+      ScrollTrigger.create({
+        trigger: el, start:'top 88%', once:true,
+        onEnter: () => gsap.to(el, { opacity:1, y:0, duration:.9, ease:'power3.out' })
+      });
+    });
+
+  }, document.body);
+
+  // ══ MODAL COTIZADOR ══════════════════════════════════════════
+  const M_DATA = {
+    'Vainilla': {
+      'Dulce de leche':    { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
+      'Crema pastelera':   { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
+      'Chocolate':         { 'Crema de chantillí': {s1:28,s2:39,s3:50,s4:45,s5:68,s6:83} },
+      'Crema de avellana': { 'Crema de chantillí': {s1:28,s2:39,s3:50,s4:45,s5:55,s6:65} },
+    },
+    'Chocolate': {
+      'Dulce de leche': { 'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75} },
+      'Chocolate':      { 'Crema de chantillí': {s1:29,s2:39,s3:49,s4:46,s5:61,s6:76} },
+    },
+    'Marmoleado': {
+      'Dulce de leche':    { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
+      'Crema de avellana': { 'Crema de chantillí': {s1:27,s2:37,s3:47,s4:45,s5:60,s6:75} },
+    },
+    'Zanahoria': {
+      'Frosting de queso': {
+        'Crema de chantillí': {s1:28,s2:40,s3:52,s4:50,s5:70,s6:90},
+        'Frosting de queso':  {s1:28,s2:40,s3:52,s4:50,s5:70,s6:90},
+      },
+      'Dulce de leche':    { 'Crema de chantillí': {s1:28,s2:38,s3:47,s4:49,s5:65,s6:85} },
+      'Crema de avellana': { 'Crema de chantillí': {s1:28,s2:38,s3:47,s4:49,s5:65,s6:85} },
+    },
+    'Limón': {
+      'Frosting de queso': { 'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75} },
+    },
+    'Limón con blueberries': {
+      'Frosting de queso + Salsa de blueberries': {
+        'Crema de chantillí': {s1:28,s2:35,s3:42,s4:45,s5:53,s6:63},
+        'Frosting de queso':  {s1:30,s2:36,s3:45,s4:50,s5:65,s6:80},
+      },
+    },
+    'Naranja': {
+      'Frosting de queso': { 'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75} },
+    },
+    'Red Velvet': {
+      'Frosting de queso': {
+        'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75},
+        'Frosting de queso':  {s1:30,s2:36,s3:45,s4:50,s5:65,s6:80},
+      },
+    },
+  };
+  const M_TAM = {
+    s1:{label:'6"×3"',porciones:'6 a 8'}, s2:{label:'8"×3"',porciones:'10 a 12'},
+    s3:{label:'10"×3"',porciones:'14 a 16'}, s4:{label:'6"×6"',porciones:'18 a 20'},
+    s5:{label:'8"×5"',porciones:'30 a 35'}, s6:{label:'10"×5"',porciones:'50 a 55'},
+  };
+
+  let mStep = 1, mSel = { tam:null, biz:null, rel:null, cob:null };
+
+  function mShowStep(n) {
+    [1,2,3,4,'result'].forEach(s => {
+      const el = document.getElementById('ms' + s);
+      if (el) el.style.display = 'none';
+    });
+    document.getElementById('ms' + n).style.display = 'block';
+    // Progress bar
+    [1,2,3,4].forEach(i => {
+      document.getElementById('mp' + i).style.background =
+        i <= (n === 'result' ? 4 : n) ? 'var(--orange)' : 'rgba(30,12,10,.12)';
+    });
+    // Botones nav
+    const isResult = n === 'result';
+    document.getElementById('m-nav').style.display = isResult ? 'none' : 'flex';
+    const backBtn = document.getElementById('m-back-btn');
+    backBtn.style.display = n > 1 ? 'flex' : 'none';
+    // Next deshabilitado hasta selección
+    mUpdateNext();
+    mStep = n;
+    gsap.fromTo('#ms' + n, { opacity:0, y:16 }, { opacity:1, y:0, duration:.35, ease:'power2.out' });
+  }
+
+  function mUpdateNext() {
+    const next = document.getElementById('m-next-btn');
+    const hasVal = [null, mSel.tam, mSel.biz, mSel.rel, mSel.cob][mStep];
+    next.disabled = !hasVal;
+    next.style.opacity = hasVal ? '1' : '.35';
+    next.style.cursor = hasVal ? 'pointer' : 'default';
+  }
+
+  function mMakePills(containerId, options, key) {
+    const c = document.getElementById(containerId);
+    c.innerHTML = '';
+    options.forEach(opt => {
+      const b = document.createElement('button');
+      b.className = 'cot-pill';
+      b.style.cssText = 'font-family:var(--sans);font-weight:600;font-size:.8rem;letter-spacing:.03em;padding:.55rem 1.25rem;border-radius:9999px;border:1.5px solid rgba(30,12,10,.15);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;';
+      b.textContent = opt;
+      b.onmouseover = () => { if (!b.classList.contains('m-active')) { b.style.borderColor='rgba(30,12,10,.4)'; b.style.color='var(--ink)'; } };
+      b.onmouseout  = () => { if (!b.classList.contains('m-active')) { b.style.borderColor='rgba(30,12,10,.15)'; b.style.color='var(--muted)'; } };
+      b.onclick = () => {
+        c.querySelectorAll('button').forEach(x => {
+          x.classList.remove('m-active');
+          x.style.background = 'transparent'; x.style.color = 'var(--muted)'; x.style.borderColor = 'rgba(30,12,10,.15)';
+        });
+        b.classList.add('m-active');
+        b.style.background = 'var(--ink)'; b.style.color = '#fff'; b.style.borderColor = 'var(--ink)';
+        mSel[key] = opt;
+        mUpdateNext();
+      };
+      c.appendChild(b);
+    });
+  }
+
+  window.mSelectPers = function(tamKey, btn) {
+    document.querySelectorAll('.m-pers-btn').forEach(b => {
+      b.style.border = '1.5px solid rgba(30,12,10,.1)';
+      b.style.background = '#fff';
+    });
+    btn.style.border = '1.5px solid var(--orange)';
+    btn.style.background = 'rgba(236,82,40,.06)';
+    mSel.tam = tamKey;
+    // Render bizcochos para paso 2
+    mMakePills('m-biz-btns', Object.keys(M_DATA), 'biz');
+    mUpdateNext();
+  };
+
+  window.mNext = function() {
+    if (mStep === 1) {
+      mSel.biz = null; mSel.rel = null; mSel.cob = null;
+      mShowStep(2);
+    } else if (mStep === 2) {
+      mSel.rel = null; mSel.cob = null;
+      mMakePills('m-rel-btns', Object.keys(M_DATA[mSel.biz]), 'rel');
+      mShowStep(3);
+    } else if (mStep === 3) {
+      mSel.cob = null;
+      mMakePills('m-cob-btns', Object.keys(M_DATA[mSel.biz][mSel.rel]), 'cob');
+      mShowStep(4);
+    } else if (mStep === 4) {
+      // Calcular precio y mostrar resultado
+      const precio = M_DATA[mSel.biz][mSel.rel][mSel.cob][mSel.tam];
+      const tam = M_TAM[mSel.tam];
+      document.getElementById('m-price').textContent = '$' + precio;
+      document.getElementById('m-size-label').textContent =
+        'Tamaño ' + tam.label + '  ·  ' + tam.porciones + ' porciones';
+      const sumEl = document.getElementById('m-summary');
+      sumEl.innerHTML = [
+        ['Bizcocho', mSel.biz], ['Relleno', mSel.rel],
+        ['Cobertura', mSel.cob], ['Tamaño', tam.label + ' (' + tam.porciones + ' porciones)']
+      ].map(([k,v]) =>
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">' +
+        '<span style="font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">' + k + '</span>' +
+        '<span style="font-family:var(--sans);font-size:.88rem;font-weight:600;color:var(--ink);text-align:right;">' + v + '</span></div>'
+      ).join('');
+      const msg = encodeURIComponent(
+        'Hola, acabo de cotizar mi pastel en su página web y me gustaría hacer un pedido:\n\n' +
+        '🎂 Bizcocho: ' + mSel.biz + '\n' +
+        '🍮 Relleno: ' + mSel.rel + '\n' +
+        '✨ Cobertura: ' + mSel.cob + '\n' +
+        '📏 Tamaño: ' + tam.label + ' (' + tam.porciones + ' porciones)\n' +
+        '💵 Precio base: $' + precio + '\n\n' +
+        '¿Tienen disponibilidad? Me gustaría coordinar los detalles.'
+      );
+      document.getElementById('m-wa-btn').href = 'https://api.whatsapp.com/send?phone=50760602689&text=' + msg;
+      mShowStep('result');
+      gsap.fromTo('#m-price', { scale:.7, opacity:0 }, { scale:1, opacity:1, duration:.5, ease:'back.out(1.6)', delay:.2 });
+      lucide.createIcons();
+    }
+  };
+
+  window.mBack = function() {
+    if (mStep === 2) mShowStep(1);
+    else if (mStep === 3) mShowStep(2);
+    else if (mStep === 4) mShowStep(3);
+  };
+
+  window.mReset = function() {
+    mSel = { tam:null, biz:null, rel:null, cob:null };
+    document.querySelectorAll('.m-pers-btn').forEach(b => {
+      b.style.border = '1.5px solid rgba(30,12,10,.1)'; b.style.background = '#fff';
+    });
+    mShowStep(1);
+  };
+
+  window.openCotModal = function() {
+    const modal = document.getElementById('cot-modal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    mReset();
+    gsap.fromTo(modal.querySelector('div'), { opacity:0, scale:.95 }, { opacity:1, scale:1, duration:.35, ease:'power3.out' });
+    lucide.createIcons();
+  };
+
+  window.closeCotModal = function() {
+    const modal = document.getElementById('cot-modal');
+    gsap.to(modal.querySelector('div'), { opacity:0, scale:.95, duration:.25, ease:'power2.in',
+      onComplete: () => { modal.style.display = 'none'; document.body.style.overflow = ''; }
+    });
+  };
+
+  // Cerrar con Escape o clic en backdrop
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCotModal(); });
+  document.getElementById('cot-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCotModal();
+  });
+
+  // ══ C — FAQ ACCORDION ════════════════════════════════════════════
+  window.toggleFaq = function(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('i[data-lucide]');
+    const iconWrap = btn.querySelector('.faq-icon');
+    const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+    // Cerrar todos
+    document.querySelectorAll('.faq-a').forEach(a => { a.style.maxHeight = '0px'; });
+    document.querySelectorAll('.faq-icon').forEach(w => {
+      w.style.background = 'transparent';
+      w.style.borderColor = 'rgba(30,12,10,.2)';
+    });
+    lucide.createIcons(); // re-render to plus
+    if (!isOpen) {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      iconWrap.style.background = 'var(--orange)';
+      iconWrap.style.borderColor = 'var(--orange)';
+      // swap icon
+      icon.setAttribute('data-lucide', 'minus');
+      lucide.createIcons();
+    }
+  };
+
+  // ── ENGINE: Carousel 3D de foco central ─────────────────────────
+  // Posiciones relativas → xPercent, escala y opacidad
+  // -2 / +2 = fuera de pantalla  |  -1 / +1 = laterales asomados  |  0 = centro
+  const POS3D = {
+    '-2': { xPercent: -185, scale: .68, opacity: 0,   zIndex: 0 },
+    '-1': { xPercent:  -90, scale: .84, opacity: .48, zIndex: 2 },
+     '0': { xPercent:    0, scale:   1, opacity:   1, zIndex: 3 },
+     '1': { xPercent:   90, scale: .84, opacity: .48, zIndex: 2 },
+     '2': { xPercent:  185, scale: .68, opacity: 0,   zIndex: 0 },
+  };
+
+  function makeCarousel3D(slideClass, dotClass, countId, viewerId, inactiveOpacity) {
+    const slides  = Array.from(document.querySelectorAll('.' + slideClass));
+    const dots    = Array.from(document.querySelectorAll('.' + dotClass));
+    const countEl = document.getElementById(countId);
+    const viewer  = document.getElementById(viewerId);
+    const total   = slides.length;
+    let current   = 0;
+
+    function render(animated) {
+      slides.forEach((slide, i) => {
+        let rel = i - current;
+        if (rel >  total / 2) rel -= total;
+        if (rel < -total / 2) rel += total;
+        const key = String(Math.max(-2, Math.min(2, Math.round(rel))));
+        const cfg = POS3D[key];
+        const fn  = animated ? gsap.to : gsap.set;
+        fn(slide, { xPercent: cfg.xPercent, scale: cfg.scale, opacity: cfg.opacity,
+                    zIndex: cfg.zIndex, duration: .65, ease: 'power3.out' });
+      });
+      dots.forEach((d, i) => {
+        d.style.opacity = i === current ? '1' : inactiveOpacity;
+        d.style.width   = i === current ? '1.5rem' : '.45rem';
+      });
+      if (countEl) countEl.textContent =
+        String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    }
+
+    // Estado inicial sin animación
+    render(false);
+
+    // Clic en tarjetas laterales → navegar a ellas
+    slides.forEach((slide, i) => {
+      slide.addEventListener('click', () => { if (i !== current) { current = i; render(true); } });
+    });
+
+    // Swipe táctil
+    let startX = 0;
+    viewer.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    viewer.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) { current = ((current + (dx > 0 ? -1 : 1)) % total + total) % total; render(true); }
+    }, { passive: true });
+
+    return {
+      nav:  dir => { current = ((current + dir) % total + total) % total; render(true); },
+      goTo: n   => { current = ((n % total) + total) % total; render(true); },
+    };
+  }
+
+  // ── Instanciar: Pasteles ─────────────────────────────────────────
+  const _cakes   = makeCarousel3D('cake-slide',   'cake-dot',   'cake-count',   'cake-viewer',   '.22');
+  window.cakeNav   = dir => _cakes.nav(dir);
+  window.cakeGoTo  = n   => _cakes.goTo(n);
+
+  // ── Instanciar: Postres ──────────────────────────────────────────
+  const _postres = makeCarousel3D('postre-slide', 'postre-dot', 'postre-count', 'postre-viewer', '.28');
+  window.postreNav   = dir => _postres.nav(dir);
+  window.postreGoTo  = n   => _postres.goTo(n);
+
+  // ── Instanciar: Close-up ──────────────────────────────────────────
+  const _closeup = makeCarousel3D('closeup-slide', 'closeup-dot', 'closeup-count', 'closeup-viewer', '.28');
+  window.closeupNav   = dir => _closeup.nav(dir);
+  window.closeupGoTo  = n   => _closeup.goTo(n);
+</script>
+</body>
+</html>
