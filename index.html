@@ -1025,6 +1025,18 @@
           <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">50 o m&aacute;s</p>
           <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Tama&ntilde;o 10"&times;5"</p>
         </button>
+        <button class="m-pers-btn" onclick="mSelectPers('s7',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">21 a 24</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">1/4 de plancha</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('dp1',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">22 a 25</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Dos Pisos 4"&times;5" + 6"&times;5"</p>
+        </button>
+        <button class="m-pers-btn" onclick="mSelectPers('dp2',this)" style="background:#fff;border:1.5px solid rgba(30,12,10,.1);border-radius:1.25rem;padding:1.1rem;cursor:pointer;text-align:left;transition:all .2s;">
+          <p style="font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.2rem;">70 a 75</p>
+          <p style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--muted);">Dos Pisos 6"&times;3" + 8"&times;5"</p>
+        </button>
       </div>
     </div>
 
@@ -1185,14 +1197,14 @@
   // ══ MODAL COTIZADOR ══════════════════════════════════════════
   const M_DATA = {
     'Vainilla': {
-      'Dulce de leche':    { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
+      'Dulce de leche':    { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65,s7:40} },
       'Crema pastelera':   { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
       'Chocolate':         { 'Crema de chantillí': {s1:28,s2:39,s3:50,s4:45,s5:68,s6:83} },
       'Crema de avellana': { 'Crema de chantillí': {s1:28,s2:39,s3:50,s4:45,s5:55,s6:65} },
     },
     'Chocolate': {
       'Dulce de leche': { 'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75} },
-      'Chocolate':      { 'Crema de chantillí': {s1:29,s2:39,s3:49,s4:46,s5:61,s6:76} },
+      'Chocolate':      { 'Crema de chantillí': {s1:29,s2:39,s3:49,s4:46,s5:61,s6:76,s7:42} },
     },
     'Marmoleado': {
       'Dulce de leche':    { 'Crema de chantillí': {s1:25,s2:35,s3:45,s4:40,s5:50,s6:65} },
@@ -1220,15 +1232,30 @@
     },
     'Red Velvet': {
       'Frosting de queso': {
-        'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75},
+        'Crema de chantillí': {s1:28,s2:38,s3:48,s4:45,s5:60,s6:75,s7:42},
         'Frosting de queso':  {s1:30,s2:36,s3:45,s4:50,s5:65,s6:80},
       },
+    },
+    'Vainilla - Dos Pisos': {
+      'Dulce de leche': { 'Crema de chantillí': {dp1:60, dp2:90} },
+    },
+    'Marmoleado - Dos Pisos': {
+      'Dulce de leche': { 'Crema de chantillí': {dp1:60, dp2:90} },
+    },
+    'Zanahoria - Dos Pisos': {
+      'Dulce de leche': { 'Crema de chantillí': {dp1:65, dp2:115} },
+    },
+    'Chocolate - Dos Pisos': {
+      'Chocolate': { 'Crema de chantillí': {dp1:80, dp2:105} },
     },
   };
   const M_TAM = {
     s1:{label:'6"×3"',porciones:'6 a 8'}, s2:{label:'8"×3"',porciones:'10 a 12'},
     s3:{label:'10"×3"',porciones:'14 a 16'}, s4:{label:'6"×6"',porciones:'18 a 20'},
     s5:{label:'8"×5"',porciones:'30 a 35'}, s6:{label:'10"×5"',porciones:'50 a 55'},
+    s7:{label:'1/4 de plancha',porciones:'21 a 24'},
+    dp1:{label:'4"×5" + 6"×5" (Dos Pisos)',porciones:'22 a 25'},
+    dp2:{label:'6"×3" + 8"×5" (Dos Pisos)',porciones:'70 a 75'},
   };
 
   let mStep = 1, mSel = { tam:null, biz:null, rel:null, cob:null };
@@ -1295,8 +1322,15 @@
     btn.style.border = '1.5px solid var(--orange)';
     btn.style.background = 'rgba(236,82,40,.06)';
     mSel.tam = tamKey;
-    // Render bizcochos para paso 2
-    mMakePills('m-biz-btns', Object.keys(M_DATA), 'biz');
+    // Filtrar bizcochos que tengan el tamaño seleccionado
+    const availBiz = Object.keys(M_DATA).filter(biz =>
+      Object.keys(M_DATA[biz]).some(rel =>
+        Object.keys(M_DATA[biz][rel]).some(cob =>
+          tamKey in M_DATA[biz][rel][cob]
+        )
+      )
+    );
+    mMakePills('m-biz-btns', availBiz, 'biz');
     mUpdateNext();
   };
 
